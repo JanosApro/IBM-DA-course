@@ -6,13 +6,16 @@ import dash_core_components as dcc
 from dash.dependencies import Input, Output
 import plotly.express as px
 
+
 # Read the airline data into pandas dataframe
 spacex_df = pd.read_csv("spacex_launch_dash.csv")
 max_payload = spacex_df['Payload Mass (kg)'].max()
 min_payload = spacex_df['Payload Mass (kg)'].min()
 
+
 # Create a dash application
 app = dash.Dash(__name__)
+
 
 # Create an app layout
 app.layout = html.Div(children=[html.H1('SpaceX Launch Records Dashboard',
@@ -61,6 +64,7 @@ def get_pie_chart(entered_site):
         fig = px.pie(filtered_df, values='class count',names='class', 
         title='Total Success Launch for Site {}'.format(entered_site))
     return fig
+  
 # TASK 4:
 # Add a callback function for `site-dropdown` and `payload-slider` as inputs, `success-payload-scatter-chart` as output
 @app.callback(Output(component_id='success-payload-scatter-chart', component_property='figure'),
@@ -72,14 +76,14 @@ def scatter(entered_site, payload):
         fig = px.scatter(filtered_df, x='Payload Mass (kg)', y='class',
                         color='Booster Version Category',
                         title="Success Count on Payload Mass for all sites")
-        return fig
     else:
         fig = px.scatter(filtered_df[filtered_df['Launch Site'] == entered_site], x='Payload Mass (kg)', y='class',
                         color='Booster Version Category',
                         title="Success Count on Payload Mass for Site {entered_site}")
-        return fig   
+    return fig   
          
-                                
+
+
 # Run the app
 if __name__ == '__main__':
     app.run_server()
